@@ -13,9 +13,68 @@
 {%endblock%}
 
 {%block title%}
-    Homepage
+    Register
 {%endblock%}
 
 {%block main%}
-    YOYOYOYOYO
+    <div class="form-center">
+        <form method="POST", action="/register">
+            {{ form.hidden_tag() }}
+            <fieldset class="form-group">
+                <legend class="ml-3 pt-2 text-primary border-bottom mb-4 w-50"><h2>Log In</h2></legend>
+ 
+                <div class="form-group col-7">
+                    <h6>{{ form.email.label(class="form-control-label")}}</h6>
+                    <!-- check if field is invalid and then return errors in message to user-->   
+
+                    {% if form.email.errors%}
+                    {{ form.email(class="form-control form-control-sm is-invalid")}}
+                    <div class="invalid-feedback">
+                        {% for error in form.email.errors%}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                        {{ form.email(class="form-control form-control-sm")}}
+                    {% endif %}
+                </div>
+
+                <div class="form-group col-7">
+                    <h6>{{ form.password.label(class="form-control-label")}}</h6>
+                    <!-- check if field is invalid and then return errors in message to user-->   
+
+                    {% if form.password.errors%}
+                    {{ form.password(class="form-control form-control-sm is-invalid")}}
+                    <div class="invalid-feedback">
+                        {% for error in form.password.errors%}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                        {{ form.password(class="form-control form-control-sm")}}
+                    {% endif %}
+                </div>
+                
+                <div class="form-check ml-3">
+                    {{ form.remember(class="form-check-input") }}
+                    {{ form.remember.label(class="form-check-label") }}
+                </div>
+
+            </fieldset>
+
+            <div>
+                {{ form.submit(class="btn btn-outline-primary ml-3") }}
+            </div>
+
+            <small class="text-muted ml-3">
+                <a href="#">Forgot password?</a>
+            </small>
+
+            <div class="col-7 border-top border-primary mt-4 mr-auto">
+                <small class="form-text text-muted">
+                    Need an account? <a href="{{ url_for('register')}}">Sign Up Now</a>
+                </small>
+            </div>
+        </form>
+    </div>
 {%endblock%}

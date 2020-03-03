@@ -22,26 +22,73 @@
             {{ form.hidden_tag() }}
             <fieldset class="form-group">
                 <legend class="ml-3 pt-2 text-primary border-bottom mb-4 w-50"><h2>Enter data to register</h2></legend>
-                <div class="form-group col-5">
+                <div class="form-group col-7">
+
                     <h6>{{ form.username.label(class="form-control-label")}}</h6>
-                    {{ form.username(class="form-control form-control-sm")}}
+
+                     <!-- check if field is invalid and then return errors in message to user-->   
+
+                    {% if form.username.errors%}
+                        {{ form.username(class="form-control form-control-sm is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.username.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.username(class="form-control form-control-sm") }}
+                    {% endif %}
+
                 </div>
 
-                <div class="form-group col-5">
+                <div class="form-group col-7">
                     <h6>{{ form.email.label(class="form-control-label")}}</h6>
-                    {{ form.email(class="form-control form-control-sm")}}
+                    <!-- check if field is invalid and then return errors in message to user-->   
+
+                    {% if form.email.errors%}
+                    {{ form.email(class="form-control form-control-sm is-invalid")}}
+                    <div class="invalid-feedback">
+                        {% for error in form.email.errors%}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                        {{ form.email(class="form-control form-control-sm")}}
+                    {% endif %}
                 </div>
 
 
-                <div class="form-group col-5">
+                <div class="form-group col-7">
                     <h6>{{ form.password.label(class="form-control-label")}}</h6>
-                    {{ form.password(class="form-control form-control-sm")}}
+                    <!-- check if field is invalid and then return errors in message to user-->   
+
+                    {% if form.password.errors%}
+                    {{ form.password(class="form-control form-control-sm is-invalid")}}
+                    <div class="invalid-feedback">
+                        {% for error in form.password.errors%}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                        {{ form.password(class="form-control form-control-sm")}}
+                    {% endif %}
                 </div>
 
 
-                <div class="form-group col-5">
+                <div class="form-group col-7">
                     <h6>{{ form.confirm_password.label(class="form-control-label")}}</h6>
-                    {{ form.confirm_password(class="form-control form-control-sm")}}
+                    <!-- check if field is invalid and then return errors in message to user-->   
+
+                    {% if form.confirm_password.errors %}
+                    {{ form.confirm_password(class="form-control form-control-sm is-invalid")}}
+                    <div class="invalid-feedback">
+                        {% for error in form.confirm_password.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                        {{ form.confirm_password(class="form-control form-control-sm")}}
+                    {% endif %}
                 </div>
             </fieldset>
 
@@ -49,7 +96,7 @@
                 {{ form.submit(class="btn btn-outline-primary ml-3") }}
             </div>
 
-            <div class="w-50 border-top border-primary mt-4 ml-3">
+            <div class="col-7 border-top border-primary mt-4 mr-auto">
                 <small class="form-text text-muted">
                     Already Have an account? <a href="{{ url_for('login')}}">Sign In</a>
                 </small>
