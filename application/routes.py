@@ -1,16 +1,22 @@
-from flask import render_template, url_for, redirect, flash
+from flask import render_template, url_for, redirect, flash, request
 from application.forms import RegistrationForm, LoginForm
 from application.models import Users, History
 from application import app, db, bcrypt
-from flask_login import login_user
+from flask_login import login_user, current_user, logout_user, login_required
 
 @app.route("/home")
 @app.route("/")
+@login_required
 def home():
     return render_template("home.html")
 
 @app.route("/login", methods=["GET","POST"])
 def login():
+
+    #if current user is already logged in -> redirect to home page
+    if current_user.is_authenticated:
+        return redirect(url_for('home'))
+
     #assign a form class imported from forms.py
     form = LoginForm()
 
@@ -24,7 +30,7 @@ def login():
 
             #log in that user 
             login_user(user, remember=form.remember.data)
-
+            
             #redirect to home page
             return redirect(url_for('home'))
 
@@ -36,6 +42,11 @@ def login():
 
 @app.route("/register", methods=["GET","POST"])
 def register():
+
+    #if current user is already logged in -> redirect to home page
+    if current_user.is_authenticated:
+        return redirect(url_for('home'))
+
     #assign a form class imported from forms.py
     form = RegistrationForm()
 
@@ -63,6 +74,12 @@ def register():
 
     return render_template("register.html", form = form)    
 
-@app.route("/about")
-def about():
-    return "About"
+@app.route("/logout")
+def logout():
+    logout_user()
+    return redirect(url_for('login'))
+
+@app.route("/history")
+@login_required
+def history():
+    return render_template("history.html")    
