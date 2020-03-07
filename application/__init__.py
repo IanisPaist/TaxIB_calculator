@@ -9,6 +9,8 @@ app.config['SECRET_KEY']='9f4524c7618dff15e241e048dd3449ab'
 #config sqlite db
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
 
+app.static_folder = 'static'
+
 #create db instanse
 db = SQLAlchemy(app)
 bcrypt = Bcrypt(app)

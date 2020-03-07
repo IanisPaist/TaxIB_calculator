@@ -83,3 +83,8 @@ def logout():
 @login_required
 def history():
     return render_template("history.html")    
+
+@app.route("/account")
+@login_required
+def account():
+    return render_template("account.html")    
