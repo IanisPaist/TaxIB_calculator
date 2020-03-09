@@ -6,45 +6,45 @@
 {%endblock%}
 
 {%block main%}
-    <div class="form-center">   
+    <div class="container">   
         <form method="POST", action="/login">
             {{ form.hidden_tag() }}
             <fieldset class="form-group">
-                <legend class="ml-3 pt-2 text-primary border-bottom mb-4 w-50"><h2>Log In</h2></legend>
+                <legend class="pt-2 text-primary border-bottom mb-4"><h2>Log In</h2></legend>
  
-                <div class="form-group col-7">
+                <div class="form-group">
                     <h6>{{ form.email.label(class="form-control-label")}}</h6>
                     <!-- check if field is invalid and then return errors in message to user-->   
 
                     {% if form.email.errors%}
-                    {{ form.email(class="form-control form-control-sm is-invalid")}}
+                    {{ form.email(class="form-control form-control-lg is-invalid")}}
                     <div class="invalid-feedback">
                         {% for error in form.email.errors%}
                             <span>{{ error }}</span>
                         {% endfor %}
                     </div>
                     {% else %}
-                        {{ form.email(class="form-control form-control-sm")}}
+                        {{ form.email(class="form-control form-control-lg")}}
                     {% endif %}
                 </div>
 
-                <div class="form-group col-7">
+                <div class="form-group">
                     <h6>{{ form.password.label(class="form-control-label")}}</h6>
                     <!-- check if field is invalid and then return errors in message to user-->   
 
                     {% if form.password.errors%}
-                    {{ form.password(class="form-control form-control-sm is-invalid")}}
+                    {{ form.password(class="form-control form-control-lg is-invalid")}}
                     <div class="invalid-feedback">
                         {% for error in form.password.errors%}
                             <span>{{ error }}</span>
                         {% endfor %}
                     </div>
                     {% else %}
-                        {{ form.password(class="form-control form-control-sm")}}
+                        {{ form.password(class="form-control form-control-lg")}}
                     {% endif %}
                 </div>
                 
-                <div class="form-check ml-3">
+                <div class="form-check">
                     {{ form.remember(class="form-check-input") }}
                     {{ form.remember.label(class="form-check-label") }}
                 </div>
@@ -52,14 +52,14 @@
             </fieldset>
 
             <div>
-                {{ form.submit(class="btn btn-outline-primary ml-3") }}
+                {{ form.submit(class="btn btn-primary") }}
             </div>
 
-            <small class="text-muted ml-3">
+            <small class="text-muted mt-4">
                 <a href="#">Forgot password?</a>
             </small>
 
-            <div class="col-7 border-top border-primary mt-4 mr-auto">
+            <div class="border-top border-primary mt-2">
                 <small class="form-text text-muted">
                     Need an account? <a href="{{ url_for('register')}}">Sign Up Now</a>
                 </small>

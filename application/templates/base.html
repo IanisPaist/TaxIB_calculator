@@ -55,25 +55,25 @@
       
         </nav>
         
+        <div class="my-container">  
+            <!-- use function to get flashed messages which were sent to request-->
+            {% with messages = get_flashed_messages(with_categories=true)%}
+                <!-- check that messages were returned -->
+                {% if messages %}
+                    <!-- loop within messages-->
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }} text-center align-middle">
+                            {{ message }} 
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
 
-        <!-- use function to get flashed messages which were sent to request-->
-        {% with messages = get_flashed_messages(with_categories=true)%}
-            <!-- check that messages were returned -->
-            {% if messages %}
-                <!-- loop within messages-->
-                {% for category, message in messages %}
-                    <div class="alert alert-{{ category }}">
-                        <p class = "alert-heading text-center align-middle">
-                            {{ message }}
-                        </p>
-                       
-                    </div>
-                {% endfor %}
-            {% endif %}
-        {% endwith %}
+            <!--MAIN BLOCK -->   
+            {%block main%}
+            {%endblock%}
+        </div>
 
-        {%block main%}
-        {%endblock%}
 
         <!-- Optional JavaScript -->
         <!-- jQuery first, then Popper.js, then Bootstrap JS -->

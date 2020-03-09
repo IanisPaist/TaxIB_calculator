@@ -1,5 +1,5 @@
 from flask import render_template, url_for, redirect, flash, request
-from application.forms import RegistrationForm, LoginForm
+from application.forms import RegistrationForm, LoginForm, UpdateAccountForm
 from application.models import Users, History
 from application import app, db, bcrypt
 from flask_login import login_user, current_user, logout_user, login_required
@@ -84,7 +84,28 @@ def logout():
 def history():
     return render_template("history.html")    
 
-@app.route("/account")
+@app.route("/account", methods=["GET","POST"])
 @login_required
 def account():
-    return render_template("account.html")    
+    form = UpdateAccountForm()
+
+    if form.validate_on_submit():
+
+        #update values for current user
+        current_user.username = form.username.data
+        current_user.email = form.email.data
+
+        #commit them to database
+        db.session.commit()
+
+        #flash success message
+        flash('Your account have been updated', 'success')
+        
+        #return to account page without POST request
+        return redirect(url_for('account'))
+
+    elif request.method == "GET":
+        form.username.data = current_user.username
+        form.email.data = current_user.email
+
+    return render_template("account.html", form=form)    

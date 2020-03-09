@@ -5,12 +5,11 @@
 {%endblock%}
 
 {%block main%}
-    <div class="my-container">
         <div class="container">
             <form method="POST", action="/register">
                 {{ form.hidden_tag() }}
                 <fieldset class="form-group">
-                    <legend><h2>Enter data to register</h2></legend>
+                    <legend class="pt-2 text-primary border-bottom mb-4"><h2>Register</h2></legend>
                     <div class="form-group">
 
                         <h6>{{ form.username.label(class="form-control-label")}}</h6>
@@ -18,14 +17,14 @@
                         <!-- check if field is invalid and then return errors in message to user-->   
 
                         {% if form.username.errors%}
-                            {{ form.username(class="form-control form-control-sm is-invalid") }}
+                            {{ form.username(class="form-control form-control-lg is-invalid") }}
                             <div class="invalid-feedback">
                                 {% for error in form.username.errors %}
                                     <span>{{ error }}</span>
                                 {% endfor %}
                             </div>
                         {% else %}
-                            {{ form.username(class="form-control form-control-sm") }}
+                            {{ form.username(class="form-control form-control-lg") }}
                         {% endif %}
 
                     </div>
@@ -35,14 +34,14 @@
                         <!-- check if field is invalid and then return errors in message to user-->   
 
                         {% if form.email.errors%}
-                        {{ form.email(class="form-control form-control-sm is-invalid")}}
+                        {{ form.email(class="form-control form-control-lg is-invalid")}}
                         <div class="invalid-feedback">
                             {% for error in form.email.errors%}
                                 <span>{{ error }}</span>
                             {% endfor %}
                         </div>
                         {% else %}
-                            {{ form.email(class="form-control form-control-sm")}}
+                            {{ form.email(class="form-control form-control-lg")}}
                         {% endif %}
                     </div>
 
@@ -52,14 +51,14 @@
                         <!-- check if field is invalid and then return errors in message to user-->   
 
                         {% if form.password.errors%}
-                        {{ form.password(class="form-control form-control-sm is-invalid")}}
+                        {{ form.password(class="form-control form-control-lg is-invalid")}}
                         <div class="invalid-feedback">
                             {% for error in form.password.errors%}
                                 <span>{{ error }}</span>
                             {% endfor %}
                         </div>
                         {% else %}
-                            {{ form.password(class="form-control form-control-sm")}}
+                            {{ form.password(class="form-control form-control-lg")}}
                         {% endif %}
                     </div>
 
@@ -69,14 +68,14 @@
                         <!-- check if field is invalid and then return errors in message to user-->   
 
                         {% if form.confirm_password.errors %}
-                        {{ form.confirm_password(class="form-control form-control-sm is-invalid")}}
+                        {{ form.confirm_password(class="form-control form-control-lg is-invalid")}}
                         <div class="invalid-feedback">
                             {% for error in form.confirm_password.errors %}
                                 <span>{{ error }}</span>
                             {% endfor %}
                         </div>
                         {% else %}
-                            {{ form.confirm_password(class="form-control form-control-sm")}}
+                            {{ form.confirm_password(class="form-control form-control-lg")}}
                         {% endif %}
                     </div>
                 
@@ -93,5 +92,4 @@
                 </div>
             </form>
         </div>
-    </div>
 {%endblock%}
