@@ -33,7 +33,7 @@
                 <!-- Links for logged in user -->
                 <div class="collapse navbar-collapse" id="collapsibleNavbar">
                     <ul class="navbar-nav mr-auto">
-                        <li class="nav-item"><a class="nav-link" href="{{ url_for('history')}}">History</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{{ url_for('activity')}}">Activity Statament</a></li>
                     </ul>
                     <ul class="navbar-nav ml-auto">
                         <li class="nav-item"><a class="nav-link" href="{{ url_for('account')}}">My account</a></li>                    
@@ -68,11 +68,11 @@
                     {% endfor %}
                 {% endif %}
             {% endwith %}
-
+        </div>
             <!--MAIN BLOCK -->   
             {%block main%}
             {%endblock%}
-        </div>
+        
 
 
         <!-- Optional JavaScript -->

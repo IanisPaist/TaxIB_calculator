@@ -1,5 +1,7 @@
+import os
+import secrets
 from flask import render_template, url_for, redirect, flash, request
-from application.forms import RegistrationForm, LoginForm, UpdateAccountForm
+from application.forms import RegistrationForm, LoginForm, UpdateAccountForm, ActivityStatementUploadForm
 from application.models import Users, History
 from application import app, db, bcrypt
 from flask_login import login_user, current_user, logout_user, login_required
@@ -79,10 +81,25 @@ def logout():
     logout_user()
     return redirect(url_for('login'))
 
-@app.route("/history")
+@app.route("/activity_statement", methods=["GET","POST"])
 @login_required
-def history():
-    return render_template("history.html")    
+def activity():
+    form = ActivityStatementUploadForm()
+
+    if form.validate_on_submit():
+
+        #check that file exists
+        if form.csv.data:
+            
+            # Create variable for uploaded file
+            f = form.csv.data
+
+            #store the file contents as a string
+            fstring = f.read()
+
+        return render_template("activity_statement.html", form=form, fstring=fstring)  
+    else:
+        return render_template("activity_statement.html", form=form)    
 
 @app.route("/account", methods=["GET","POST"])
 @login_required

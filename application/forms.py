@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from flask_wtf.file import FileField,FileAllowed
+from flask_wtf.file import FileField, FileAllowed
 from wtforms import StringField, PasswordField, SubmitField, BooleanField
 from wtforms.validators import DataRequired, Length, Email,EqualTo, ValidationError
 from application.models import Users
@@ -78,4 +78,9 @@ class UpdateAccountForm(FlaskForm):
             if email:
                 raise ValidationError("Этот email занят. Пожалуйста, выберите другой")
 
-
+#form to upload activity statement in csv format
+class ActivityStatementUploadForm(FlaskForm):
+    
+    csv = FileField("Activity Statement", validators=[FileAllowed(['csv'])])
+    
+    submit = SubmitField('Upload')

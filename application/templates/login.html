@@ -6,6 +6,7 @@
 {%endblock%}
 
 {%block main%}
+<div class="my-container">
     <div class="container">   
         <form method="POST", action="/login">
             {{ form.hidden_tag() }}
@@ -66,4 +67,5 @@
             </div>
         </form>
     </div>
+</div>
 {%endblock%}

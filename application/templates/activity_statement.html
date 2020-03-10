@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+
+{% block title %}
+    History of transactions
+{% endblock %}
+
+{% block main %}
+    <div class="container">
+        <form method="POST", action="/activity_statement" enctype="multipart/form-data">
+            {{ form.hidden_tag() }}
+            
+            <fieldset class="form-group">
+                <legend class="pt-2 text-primary border-bottom mb-4"><h2>Upload File</h2></legend>
+
+                <div class="form-group">
+                    <h6>{{ form.csv.label(class="form-control-label")}}</h6>
+                    {{form.csv(class="form-control-file")}}
+                    <!-- different handling of errors for FileField-->
+                    {% if form.csv.errors %}
+                        {% for error in form.csv.errors %}
+                            <span class="text-danger">{{ error }}</span></br>
+                        {% endfor %}                  
+                    {% endif %}
+                </div>
+            </fieldset>
+
+            <div>
+                {{ form.submit(class="btn btn-primary") }}
+            </div>
+        </form>
+    </div>
+    
+    
+    <div class="container mt-5">
+        <div class="row">
+            <legend class="pt-2 text-primary border-bottom mb-4"><h2>Transactions</h2></legend>
+        </div>
+
+        <div class="row">
+            {{ fstring }}
+        </div>
+    </div>
+
+{% endblock %}
