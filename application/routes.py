@@ -81,9 +81,9 @@ def logout():
     logout_user()
     return redirect(url_for('login'))
 
-@app.route("/activity_statement", methods=["GET","POST"])
+@app.route("/dividends", methods=["GET","POST"])
 @login_required
-def activity():
+def dividends():
     form = ActivityStatementUploadForm()
 
     if form.validate_on_submit():
@@ -95,11 +95,39 @@ def activity():
             f = form.csv.data
 
             #store the file contents as a string
-            fstring = f.read()
+            fstring = f.read().decode("utf-8")
 
-        return render_template("activity_statement.html", form=form, fstring=fstring)  
+            #split strings
+            raw_lines = fstring.splitlines()
+
+            #extract only dividends into separate list
+            dividends = []
+            header = []
+            for line in raw_lines:
+                splitted_line = line.split(",")
+                
+                if splitted_line[0] == "Дивиденды":
+                    if splitted_line[1] != "Header":    
+                        dividends.append(line)
+
+            #create list of dictionaries
+            dividends_list = []
+
+            for line in dividends:
+                splitted_line = line.split(",")
+                dividends_list.append(
+                    {
+                        "Date" : splitted_line[3],
+                        "Currency" : splitted_line[2],
+                        "Description" : splitted_line[4].split("(")[0],
+                        "Sum" : splitted_line[5]    
+                    }
+                )
+
+
+        return render_template("dividends.html", form=form, dividends_list=dividends_list)  
     else:
-        return render_template("activity_statement.html", form=form)    
+        return render_template("dividends.html", form=form)    
 
 @app.route("/account", methods=["GET","POST"])
 @login_required

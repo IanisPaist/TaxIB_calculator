@@ -7,7 +7,7 @@
 
 {% block main %}
     <div class="container">
-        <form method="POST", action="/activity_statement" enctype="multipart/form-data">
+        <form method="POST", action="/dividends" enctype="multipart/form-data">
             {{ form.hidden_tag() }}
             
             <fieldset class="form-group">
@@ -38,7 +38,9 @@
         </div>
 
         <div class="row">
-            {{ fstring }}
+            {% for row in dividends_list %}
+                {{ row["Date"] }} {{ row["Currency"] }} {{ row["Description"] }} {{ row["Sum"] }} </br>
+            {% endfor %}
         </div>
     </div>
 
