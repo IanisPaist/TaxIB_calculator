@@ -79,8 +79,8 @@ class UpdateAccountForm(FlaskForm):
                 raise ValidationError("Этот email занят. Пожалуйста, выберите другой")
 
 #form to upload activity statement in csv format
-class ActivityStatementUploadForm(FlaskForm):
+class DividendsUploadForm(FlaskForm):
     
-    csv = FileField("Activity Statement", validators=[FileAllowed(['csv'])])
+    csv = FileField("Dividends", validators=[FileAllowed(['csv'])])
     
     submit = SubmitField('Upload')

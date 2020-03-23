@@ -34,12 +34,12 @@
     
     <div class="container mt-5">
         <div class="row">
-            <legend class="pt-2 text-primary border-bottom mb-4"><h2>Transactions</h2></legend>
+            <legend class="pt-2 text-primary border-bottom mb-4"><h2>Dividends</h2></legend>
         </div>
 
         <div class="row">
-            {% for row in dividends_list %}
-                {{ row["Date"] }} {{ row["Currency"] }} {{ row["Description"] }} {{ row["Sum"] }} </br>
+            {% for row in dividends %}
+                {{ row["Date"] }} {{ row["Currency"] }} {{ row["Symbol"] }} {{ row["WithholdInUSD"] }} </br>
             {% endfor %}
         </div>
     </div>

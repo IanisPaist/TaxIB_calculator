@@ -1,8 +1,10 @@
 import os
 import secrets
+import csv
+from datetime import datetime
 from flask import render_template, url_for, redirect, flash, request
-from application.forms import RegistrationForm, LoginForm, UpdateAccountForm, ActivityStatementUploadForm
-from application.models import Users, History
+from application.forms import RegistrationForm, LoginForm, UpdateAccountForm, DividendsUploadForm
+from application.models import Users, Dividends
 from application import app, db, bcrypt
 from flask_login import login_user, current_user, logout_user, login_required
 
@@ -84,7 +86,7 @@ def logout():
 @app.route("/dividends", methods=["GET","POST"])
 @login_required
 def dividends():
-    form = ActivityStatementUploadForm()
+    form = DividendsUploadForm()
 
     if form.validate_on_submit():
 
@@ -95,37 +97,63 @@ def dividends():
             f = form.csv.data
 
             #store the file contents as a string
-            fstring = f.read().decode("utf-8")
+            fstring = f.read().decode("utf-8").lower()
 
-            #split strings
-            raw_lines = fstring.splitlines()
+            #everything is the file is separated by commas so to read we need to extract needed lines
+            #they all start by DividendDetail and 17 words long
+            
+            #find boundaries of needed info
+            index_left = fstring.find("DividendDetail".lower())
+            index_right = fstring.find("DividendRevenueSummary".lower())
 
-            #extract only dividends into separate list
+            #extract string
+            tmp_string = fstring[index_left:index_right]
+
+            #split by newline
+            splitted_list = tmp_string.splitlines()
+            
+            #remove last ","
+            splitted_list = [s.rstrip(",") for s in splitted_list]
+
+            #creater a reader
+            reader = csv.DictReader(splitted_list)
+
+            #extract dividends data from reader
             dividends = []
-            header = []
-            for line in raw_lines:
-                splitted_line = line.split(",")
-                
-                if splitted_line[0] == "Дивиденды":
-                    if splitted_line[1] != "Header":    
-                        dividends.append(line)
 
-            #create list of dictionaries
-            dividends_list = []
+            for row in reader:
+                if row["datadiscriminator"] == "summary":
 
-            for line in dividends:
-                splitted_line = line.split(",")
-                dividends_list.append(
-                    {
-                        "Date" : splitted_line[3],
-                        "Currency" : splitted_line[2],
-                        "Description" : splitted_line[4].split("(")[0],
-                        "Sum" : splitted_line[5]    
-                    }
-                )
+                    # add info into database
+                    data = Dividends(
+                        symbol = row["symbol"].upper(),
+                        div_date = datetime.strptime(row["reportdate"], '%Y%m%d').date(),
+                        div_year = int(row["reportdate"][0:4]),
+                        gross_income_usd = float(row["grossinusd"]),
+                        tax_us = float(row["withholdinusd"]),
+                        exchange_rate = 1,
+                        gross_income_rub = 1,
+                        tax_ru = 1,
+                        users_id = 1
+                    )
+                    
 
+                    #add changes to db
+                    db.session.add(data)
+                    db.session.commit()
 
-        return render_template("dividends.html", form=form, dividends_list=dividends_list)  
+                    dividends.append(
+                        {
+                            "Date": row["reportdate"],
+                            "Currency" : row["currency"],
+                            "Symbol": row["symbol"],
+                            "Shares": row["shares"],
+                            "GrossInUsd": row["grossinusd"],
+                            "WithholdInUSD": row["withholdinusd"]
+                        }
+                    )
+
+        return render_template("dividends.html", form=form,dividends=dividends)  
     else:
         return render_template("dividends.html", form=form)    
 

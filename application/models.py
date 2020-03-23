@@ -15,20 +15,25 @@ class Users(db.Model, UserMixin):
     username = db.Column(db.String(20), unique=True, nullable=False)
     email = db.Column(db.String(120),unique=True, nullable=False)
     password = db.Column(db.String(60),nullable=False)
-    cash_balance = db.Column(db.Integer,nullable=False, default = 10000)
-    transactions  = db.relationship("History", backref="current_user", lazy=True) #relationship with history by its foreign key
+    dividends  = db.relationship("Dividends", backref="current_user", lazy=True) #relationship with Dividends by its foreign key
 
     #define how object looks when we print it out
     def __repr__(self):
         return f"User('{self.username}', '{ self.email}', '{self.cash_balance}')"
 
-#create SQL table for transaction history
-class History(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    ticker = db.Column(db.String(100), nullable = False)
-    tr_date = db.Column(db.DateTime, nullable = False, default=datetime.utcnow)
+#create SQL table for dividends history
+class Dividends(db.Model, UserMixin):
+    dividend_id = db.Column(db.Integer, primary_key=True)
+    symbol = db.Column(db.String(100), nullable = False)
+    div_date = db.Column(db.DateTime, nullable = False)
+    div_year = db.Column(db.Integer, nullable = False)
+    gross_income_usd = db.Column(db.Float,nullable = False)
+    tax_us = db.Column(db.Float,nullable=False)
+    exchange_rate = db.Column(db.Float,nullable=False)
+    gross_income_rub = db.Column(db.Float,nullable = False)
+    tax_ru = db.Column(db.Float,nullable=False)
     users_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
 
     def __repr__(self):
-        return f"History('{self.ticker}','{self.users_id}')"
+        return f"Dividends('{self.symbol}','{self.users_id}')"
 
