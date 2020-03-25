@@ -134,7 +134,7 @@ def dividends():
                         exchange_rate = 1,
                         gross_income_rub = 1,
                         tax_ru = 1,
-                        users_id = 1
+                        users_id = current_user.id
                     )
                     
 
@@ -182,3 +182,15 @@ def account():
         form.email.data = current_user.email
 
     return render_template("account.html", form=form)    
+
+
+
+@app.route("/dividends_delete", methods=["GET","POST"])
+@login_required
+def delete_dividends_data():
+
+    #query db for current user data 
+
+
+
+    return redirect(url_for('dividends'))
