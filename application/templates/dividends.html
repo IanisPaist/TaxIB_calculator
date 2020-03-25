@@ -39,9 +39,23 @@
         </div>
 
         <div class="row">
-            {% for row in dividends %}
-                {{ row["Date"] }} {{ row["Currency"] }} {{ row["Symbol"] }} {{ row["WithholdInUSD"] }} </br>
-            {% endfor %}
+              <table class="table">
+                <thead class="thead-light">
+                  <tr>
+                    <th scope="col">Date</th>
+                    <th scope="col">Symbol</th>
+                  </tr>
+                </thead>
+                <tbody>
+                
+                {% for row in dividends %}
+                  <tr>
+                    <td>{{ row.div_date }}</td>
+                    <td>{{ row.symbol }}</td>
+                </tr>
+                {% endfor %}  
+                </tbody>
+              </table>
         </div>
     </div>
 

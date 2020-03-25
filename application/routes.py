@@ -1,7 +1,7 @@
 import os
 import secrets
 import csv
-from datetime import datetime
+from datetime import datetime, date
 from flask import render_template, url_for, redirect, flash, request
 from application.forms import RegistrationForm, LoginForm, UpdateAccountForm, DividendsUploadForm
 from application.models import Users, Dividends
@@ -124,10 +124,14 @@ def dividends():
             for row in reader:
                 if row["datadiscriminator"] == "summary":
 
+                    #convert date
+                    d1 = datetime.strptime(row["reportdate"], '%Y%m%d')
+                    d2 = datetime.strftime(d1,"%d.%m.%Y")
+
                     # add info into database
                     data = Dividends(
                         symbol = row["symbol"].upper(),
-                        div_date = datetime.strptime(row["reportdate"], '%Y%m%d').date(),
+                        div_date = d2,
                         div_year = int(row["reportdate"][0:4]),
                         gross_income_usd = float(row["grossinusd"]),
                         tax_us = float(row["withholdinusd"]),
@@ -142,20 +146,17 @@ def dividends():
                     db.session.add(data)
                     db.session.commit()
 
-                    dividends.append(
-                        {
-                            "Date": row["reportdate"],
-                            "Currency" : row["currency"],
-                            "Symbol": row["symbol"],
-                            "Shares": row["shares"],
-                            "GrossInUsd": row["grossinusd"],
-                            "WithholdInUSD": row["withholdinusd"]
-                        }
-                    )
 
-        return render_template("dividends.html", form=form,dividends=dividends)  
+        #redirect to this page as GET request to show data
+        return redirect(url_for('dividends')) 
     else:
-        return render_template("dividends.html", form=form)    
+        
+        #show all current data in db
+        
+        #query db
+        result = Dividends.query.filter(Dividends.users_id == current_user.id).all()
+        
+        return render_template("dividends.html", form=form, dividends=result)    
 
 @app.route("/account", methods=["GET","POST"])
 @login_required
@@ -190,7 +191,11 @@ def account():
 def delete_dividends_data():
 
     #query db for current user data 
+    result = Dividends.query.filter(Dividends.users_id == current_user.id).all()
 
-
+    #delete
+    for r in result:
+        db.session.delete(r)
+    db.session.commit()
 
     return redirect(url_for('dividends'))

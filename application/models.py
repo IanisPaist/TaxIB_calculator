@@ -25,7 +25,7 @@ class Users(db.Model, UserMixin):
 class Dividends(db.Model, UserMixin):
     dividend_id = db.Column(db.Integer, primary_key=True)
     symbol = db.Column(db.String(100), nullable = False)
-    div_date = db.Column(db.DateTime, nullable = False)
+    div_date = db.Column(db.String(50), nullable = False)
     div_year = db.Column(db.Integer, nullable = False)
     gross_income_usd = db.Column(db.Float,nullable = False)
     tax_us = db.Column(db.Float,nullable=False)
