@@ -118,15 +118,43 @@ def dividends():
             #creater a reader
             reader = csv.DictReader(splitted_list)
 
-            #extract dividends data from reader
-            dividends = []
-
             for row in reader:
                 if row["datadiscriminator"] == "summary":
 
                     #convert date
                     d1 = datetime.strptime(row["reportdate"], '%Y%m%d')
                     d2 = datetime.strftime(d1,"%d.%m.%Y")
+
+                    exch_rate = 0
+                    #get USD exchange rate
+                    #open file and find rate
+                    #if rate doenst exist on that date - take previous one
+                    with open("application/usd.csv",'r') as file_usd:
+                        usd_reader = csv.DictReader(file_usd)
+                        while exch_rate == 0:
+                            for d in usd_reader:
+                                if datetime.strptime(d["data"],'%d.%m.%Y') == d1:
+                                    exch_rate = float(d["curs"])
+                                elif datetime.strptime(d["data"],'%d.%m.%Y') > d1:
+                                    exch_rate = prev_exch_rate
+                                else:
+                                    prev_exch_rate = float(d["curs"])
+                    
+                    
+                    #calculate income in rub
+                    income_rub = float(row["grossinusd"])  * float(exch_rate)
+                    
+                    #Convert to Rub tax paid in USA
+                    taxInUsRub = float(row["withholdinusd"]) * float(exch_rate)
+
+                    #calculate rus tax
+                    #1.forecast as 13%
+                    tax13 = income_rub * -0.13
+                    
+                    #tax13 is max - calculate by how much tax paid in USA lower
+                    taxInRus = tax13 - taxInUsRub
+                    if taxInRus > 0:
+                        taxInRus = 0
 
                     # add info into database
                     data = Dividends(
@@ -135,9 +163,10 @@ def dividends():
                         div_year = int(row["reportdate"][0:4]),
                         gross_income_usd = float(row["grossinusd"]),
                         tax_us = float(row["withholdinusd"]),
-                        exchange_rate = 1,
-                        gross_income_rub = 1,
-                        tax_ru = 1,
+                        exchange_rate = "{:.2f}".format(exch_rate),
+                        gross_income_rub = "{:.2f}".format(income_rub),
+                        tax_USA_rub = "{:.2f}".format(taxInUsRub),
+                        tax_RUS_rub = "{:.2f}".format(taxInRus),
                         users_id = current_user.id
                     )
                     

@@ -31,7 +31,8 @@ class Dividends(db.Model, UserMixin):
     tax_us = db.Column(db.Float,nullable=False)
     exchange_rate = db.Column(db.Float,nullable=False)
     gross_income_rub = db.Column(db.Float,nullable = False)
-    tax_ru = db.Column(db.Float,nullable=False)
+    tax_USA_rub = db.Column(db.Float,nullable=False)
+    tax_RUS_rub = db.Column(db.Float,nullable=False)
     users_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
 
     def __repr__(self):

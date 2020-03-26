@@ -42,17 +42,31 @@
               <table class="table">
                 <thead class="thead-light">
                   <tr>
+                    <th scope="col">Year</th>
                     <th scope="col">Date</th>
                     <th scope="col">Symbol</th>
+                    <th scope="col">Income USD</th>
+                    <th scope="col">Tax USD</th>
+                    <th scope="col">Income RUB</th>
+                    <th scope="col">Tax USA rub</th>
+                    <th scope="col">Tax RUS rub</th>
+                    <th scope="col">Exchange rate</th>
                   </tr>
                 </thead>
                 <tbody>
                 
                 {% for row in dividends %}
                   <tr>
+                    <td>{{ row.div_year }}</td>
                     <td>{{ row.div_date }}</td>
                     <td>{{ row.symbol }}</td>
-                </tr>
+                    <td>{{ row.gross_income_usd }}</td>
+                    <td>{{ row.tax_us }}</td>
+                    <td>{{ row.gross_income_rub }}</td>
+                    <td>{{ row.tax_USA_rub }}</td>
+                    <td>{{ row.tax_RUS_rub }}</td>
+                    <td>{{ row.exchange_rate }}</td>
+                  </tr>
                 {% endfor %}  
                 </tbody>
               </table>
