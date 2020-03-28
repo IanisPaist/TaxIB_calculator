@@ -156,6 +156,12 @@ def dividends():
                     if taxInRus > 0:
                         taxInRus = 0
 
+                    #calculate net income USD
+                    net_usd = float(row["grossinusd"]) - float(row["withholdinusd"])
+
+                    #calculate net income in RUB
+                    net_rub = income_rub - taxInUsRub - taxInRus
+
                     # add info into database
                     data = Dividends(
                         symbol = row["symbol"].upper(),
@@ -167,6 +173,8 @@ def dividends():
                         gross_income_rub = "{:.2f}".format(income_rub),
                         tax_USA_rub = "{:.2f}".format(taxInUsRub),
                         tax_RUS_rub = "{:.2f}".format(taxInRus),
+                        net_income_usd = "{:.2f}".format(net_usd),
+                        net_income_rub = "{:.2f}".format(net_rub),
                         users_id = current_user.id
                     )
                     
@@ -175,17 +183,53 @@ def dividends():
                     db.session.add(data)
                     db.session.commit()
 
-
         #redirect to this page as GET request to show data
         return redirect(url_for('dividends')) 
     else:
         
         #show all current data in db
         
-        #query db
-        result = Dividends.query.filter(Dividends.users_id == current_user.id).all()
+        #query db to get all values
+        q = Dividends.query.filter(Dividends.users_id == current_user.id).order_by(Dividends.div_year.desc()).all()
+
+        #query db to get summary for db
+
+        q2 = db.session.query(
+
+                        Dividends.div_year, 
+                        db.func.sum(Dividends.gross_income_usd),
+                        db.func.sum(Dividends.tax_us),
+                        db.func.sum(Dividends.gross_income_rub),
+                        db.func.sum(Dividends.tax_USA_rub),
+                        db.func.sum(Dividends.tax_RUS_rub),
+                        db.func.sum(Dividends.net_income_usd),
+                        db.func.sum(Dividends.net_income_rub)
+                        ).group_by(Dividends.div_year).order_by(Dividends.div_year.desc()).all()
+
         
-        return render_template("dividends.html", form=form, dividends=result)    
+        #q2 = db.session.query(Dividends.div_year, db.func.sum(Dividends.gross_income_usd),db.func.sum(Dividends.tax_us),db.func.sum(Dividends.gross_income_rub),db.func.sum(Dividends.tax_USA_rub),db.func.sum(Dividends.tax_RUS_rub),db.func.sum(Dividends.net_income_usd),db.func.sum(Dividends.net_income_rub)).group_by(Dividends.div_year).all()
+
+        #query returns list of lists but we will covert it to list of dicts
+        #iterate row by row
+        i = 0
+        summary = []
+        for row in q2:
+            summary.append(
+                {
+                "div_year": row[0],
+                "gross_income_usd": "{:.2f}".format(row[1]),
+                "tax_us": "{:.2f}".format(row[2]),
+                "gross_income_rub": "{:.2f}".format(row[3]),
+                "tax_USA_rub": "{:.2f}".format(row[4]),
+                "tax_RUS_rub": "{:.2f}".format(row[5]),
+                "net_income_usd": "{:.2f}".format(row[6]),
+                "net_income_rub": "{:.2f}".format(row[7])
+                }
+            )
+            i += 1
+
+        #render template
+        return render_template("dividends.html", form=form, dividends=q, summary=summary)   
 
 @app.route("/account", methods=["GET","POST"])
 @login_required

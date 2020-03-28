@@ -6,51 +6,102 @@
 {% endblock %}
 
 {% block main %}
-    <div class="container">
-        <form method="POST", action="/dividends" enctype="multipart/form-data">
-            {{ form.hidden_tag() }}
-            
-            <fieldset class="form-group">
-                <legend class="pt-2 text-primary border-bottom mb-4"><h2>Upload File</h2></legend>
+<div class="container">
+  <h2 class="text-primary">Description</h2>
 
-                <div class="form-group">
-                    <h6>{{ form.csv.label(class="form-control-label")}}</h6>
-                    {{form.csv(class="form-control-file")}}
-                    <!-- different handling of errors for FileField-->
-                    {% if form.csv.errors %}
-                        {% for error in form.csv.errors %}
-                            <span class="text-danger">{{ error }}</span></br>
-                        {% endfor %}                  
-                    {% endif %}
-                </div>
-            </fieldset>
+  <div class="row">
+    <p class="col-12">
+      Here you can upload "Dividend report" from Interactive Brokers
+    </p>
+  </div>
+</div>
 
-            <div>
-                {{ form.submit(class="btn btn-primary") }}
-                <button type="button" class="btn btn-danger m-1" data-toggle="modal" data-target="#deleteModal">Delete</button>
-            </div>
-        </form>
+  <div class="container">
+      <form method="POST", action="/dividends" enctype="multipart/form-data">
+          {{ form.hidden_tag() }}
+          
+          <fieldset class="form-group">
+              <legend class="pt-2 text-primary border-bottom mb-4"><h2>Upload File</h2></legend>
+
+              <div class="form-group">
+                  {{form.csv(class="form-control-file")}}
+                  <!-- different handling of errors for FileField-->
+                  {% if form.csv.errors %}
+                      {% for error in form.csv.errors %}
+                          <span class="text-danger">{{ error }}</span></br>
+                      {% endfor %}                  
+                  {% endif %}
+              </div>
+          </fieldset>
+
+          <div class="border-bottom">
+              {{ form.submit(class="btn btn-sm btn-primary") }}
+              <button type="button" class="btn btn-sm btn-danger m-1" data-toggle="modal" data-target="#deleteModal">Delete</button>
+          </div>
+      </form>
     </div>
     
-    
+    {% if not dividends%}
     <div class="container mt-5">
-        <div class="row">
-            <legend class="pt-2 text-primary border-bottom mb-4"><h2>Dividends</h2></legend>
-        </div>
+        <h6 style="color: red">There is no data uploaded</h6>
+    </div>
+      
+    {% else %}
+    <div class="container mt-5">
+      <div class="row">
+          <legend class="pt-2 text-primary border-bottom mb-4"><h2>Summary</h2></legend>
+      </div>
+        
+      <div class="row pt-2">
 
-        <div class="row">
-              <table class="table">
+        <table class="table table-sm text-center">
+          <thead class="thead-light">
+            <tr>
+              <th scope="col" class="align-middle">Year</th>
+              <th scope="col" class="align-middle">Total Income USD</th>
+              <th scope="col" class="align-middle">Total Tax USD</th>
+              <th scope="col" class="align-middle">Total Income RUB</th>
+              <th scope="col" class="align-middle">Total Tax USA RUB</th>
+              <th scope="col" class="align-middle">Total Tax RUS RUB</th>
+              <th scope="col" class="align-middle">Total Net Income USD</th>
+              <th scope="col" class="align-middle">Total Net Income RUB</th>
+            </tr>
+          </thead>
+          <tbody>
+          {% for row in summary %}
+          <tr>
+            <td>{{ row.div_year }}</td>
+            <td>{{ row.gross_income_usd }}</td>
+            <td>{{ row.tax_us }}</td>
+            <td>{{ row.gross_income_rub }}</td>
+            <td>{{ row.tax_USA_rub }}</td>
+            <td>{{ row.tax_RUS_rub }}</td>
+            <td>{{ row.net_income_usd }}</td>
+            <td>{{ row.net_income_rub }}</td>
+          </tr>
+          {% endfor %}
+          </tbody>
+        </table>
+      </div>
+
+    <div class="row">
+      <legend class="pt-2 text-primary border-bottom mb-4"><h2>Dividends detailed</h2></legend>
+    </div>
+        <div class="row pt-2">
+              <table class="table table-sm text-center">
                 <thead class="thead-light">
                   <tr>
                     <th scope="col">Year</th>
                     <th scope="col">Date</th>
+                    <th scope="col">Exchange rate</th>
                     <th scope="col">Symbol</th>
                     <th scope="col">Income USD</th>
                     <th scope="col">Tax USD</th>
                     <th scope="col">Income RUB</th>
                     <th scope="col">Tax USA rub</th>
                     <th scope="col">Tax RUS rub</th>
-                    <th scope="col">Exchange rate</th>
+                    <th scope="col">Net Income USD</th>
+                    <th scope="col">Net Income RUB</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -59,20 +110,23 @@
                   <tr>
                     <td>{{ row.div_year }}</td>
                     <td>{{ row.div_date }}</td>
+                    <td>{{ row.exchange_rate }}</td>
                     <td>{{ row.symbol }}</td>
                     <td>{{ row.gross_income_usd }}</td>
                     <td>{{ row.tax_us }}</td>
                     <td>{{ row.gross_income_rub }}</td>
                     <td>{{ row.tax_USA_rub }}</td>
                     <td>{{ row.tax_RUS_rub }}</td>
-                    <td>{{ row.exchange_rate }}</td>
+                    <td>{{ row.net_income_usd }}</td>
+                    <td>{{ row.net_income_rub }}</td>
                   </tr>
-                {% endfor %}  
+                {% endfor %}
+
                 </tbody>
               </table>
         </div>
     </div>
-
+    {% endif%}
 
 <!-- Modal -->
 <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
