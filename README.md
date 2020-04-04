@@ -31,17 +31,44 @@ Current web application makes it easier to present and calculate how much taxes 
     * the result is tax to be paid to Russian Tax Service 
 * then data is grouped by each year to better present results for each year
 
-## Example
+# Example
 
-* Csv Dividends report
+## Csv Dividends report
 
-![](images/scheme.PNG)
+Report opened in Excel - contains excessive data.  
 
+* First we extract it 
 
+<img src="images/Dividends_report.PNG" width="1100">
 
+## Calculations
 
-## Technology
+* Then make calculations 
 
-Application uses Python Flask module and SQLite 
+<img src="images/scheme.PNG" height="500">
+
+* Then Save to Database
+
+<img src="images/div_DB.PNG" width="1100">
+
+## Detailed table
+
+* Then query and show it to user each transaction
+
+<img src="images/detailed.PNG" width="1100">
+
+## Summary
+
+* And grouped by each year
+
+<img src="images/summary.PNG" width="1100">
+
+# Technology
+
+Application uses:
+* Python Flask
+* SQLite
+* Flask_wtf, wtforms, flask_login, flask_sqlalchemy
+* Bootstrap
 
 
