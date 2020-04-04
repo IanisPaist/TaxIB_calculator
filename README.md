@@ -39,7 +39,7 @@ Report opened in Excel - contains excessive data.
 
 * First we extract it 
 
-<img src="images/Dividends_report.PNG" width="1100">
+<img src="images/Dividends_report.png" width="1100">
 
 ## Calculations
 
@@ -49,7 +49,7 @@ Report opened in Excel - contains excessive data.
 
 * Then Save to Database
 
-<img src="images/div_DB.PNG" width="1100">
+<img src="images/div_DB.png" width="1100">
 
 ## Detailed table
 
