@@ -30,6 +30,10 @@ Current web application makes it easier to present and calculate how much taxes 
    * deducts tax withheld in US from total personal income tax
    * the result is tax to be paid to Russian Tax Service 
 
+
+<img src="/images/scheme.png">
+
+
 * then data is grouped by each year to better present results for each year
 
 ## Technology
