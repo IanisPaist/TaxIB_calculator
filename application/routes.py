@@ -19,7 +19,7 @@ def login():
 
     #if current user is already logged in -> redirect to home page
     if current_user.is_authenticated:
-        return redirect(url_for('home'))
+        return redirect(url_for('account'))
 
     #assign a form class imported from forms.py
     form = LoginForm()
@@ -204,7 +204,7 @@ def dividends():
                         db.func.sum(Dividends.tax_RUS_rub),
                         db.func.sum(Dividends.net_income_usd),
                         db.func.sum(Dividends.net_income_rub)
-                        ).group_by(Dividends.div_year).order_by(Dividends.div_year.desc()).all()
+                        ).filter(Dividends.users_id == current_user.id).group_by(Dividends.div_year).order_by(Dividends.div_year.desc()).all()
 
         
         #q2 = db.session.query(Dividends.div_year, db.func.sum(Dividends.gross_income_usd),db.func.sum(Dividends.tax_us),db.func.sum(Dividends.gross_income_rub),db.func.sum(Dividends.tax_USA_rub),db.func.sum(Dividends.tax_RUS_rub),db.func.sum(Dividends.net_income_usd),db.func.sum(Dividends.net_income_rub)).group_by(Dividends.div_year).all()
