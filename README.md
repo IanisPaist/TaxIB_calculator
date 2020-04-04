@@ -32,7 +32,13 @@ Current web application makes it easier to present and calculate how much taxes 
 * then data is grouped by each year to better present results for each year
 
 ## Example
+
+* Csv Dividends report
+
 ![](images/scheme.PNG)
+
+
+
 
 ## Technology
 
