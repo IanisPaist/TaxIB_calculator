@@ -36,7 +36,7 @@ def login():
             login_user(user, remember=form.remember.data)
             
             #redirect to home page
-            return redirect(url_for('home'))
+            return redirect(url_for('dividends'))
 
         else:
             #flash message if login unsuccessful
