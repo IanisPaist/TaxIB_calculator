@@ -25,16 +25,14 @@ Current web application makes it easier to present and calculate how much taxes 
         * date of transaction
     * app parses another csv file with USD/RUB exchange rates 
     * converts gross income to Russian roubles using exchange rate at date of transaction
-   * converts tax withheld in US to Russian roubles using exchange rate at date of transaction
-   * calculate personal income tax at rate of 13% as total tax to be paid
-   * deducts tax withheld in US from total personal income tax
-   * the result is tax to be paid to Russian Tax Service 
-
-
-<img src="/images/scheme.png">
-
-
+    * converts tax withheld in US to Russian roubles using exchange rate at date of transaction
+    * calculate personal income tax at rate of 13% as total tax to be paid
+    * deducts tax withheld in US from total personal income tax
+    * the result is tax to be paid to Russian Tax Service 
 * then data is grouped by each year to better present results for each year
+
+## Example
+![](images/scheme.PNG)
 
 ## Technology
 
